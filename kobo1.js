@@ -191,7 +191,7 @@
   (function() {
     // Create the connector object
     var myConnector = tableau.makeConnector();
-  
+    var _myData = [];
     // Define the schema
     myConnector.getSchema = function(schemaCallback) {
       var _userInputs = JSON.parse(tableau.connectionData);
@@ -203,6 +203,7 @@
               // //(data)
               return getAllKeysPromise(data)
                       .then(function(keys){
+                      _myData = data;
                           return {
                               data: data,
                               keys:keys
@@ -282,19 +283,20 @@
   
       //("getData Called");
       //(_userInputs);
-      getDataForSchema(_userInputs)
-      .then(function(result){
-          return _formatDataPromise(result)
-          // tableData =[];
-          // for (var i =0; i<result.length; i++){
-          //     var x =  _.mapKeys(result[i], function(value, key) {
-          //         return key.replace(/\//ig,'_');
-          //       });
-          //       table.push(x)
-          // }
+    //   getDataForSchema(_userInputs)
+    //   .then(function(result){
+    //       return _formatDataPromise(result)
+    //       // tableData =[];
+    //       // for (var i =0; i<result.length; i++){
+    //       //     var x =  _.mapKeys(result[i], function(value, key) {
+    //       //         return key.replace(/\//ig,'_');
+    //       //       });
+    //       //       table.push(x)
+    //       // }
   
           
-      })
+    //   })
+    _formatDataPromise(_myData)
       .then(function(result){
           table.appendRows(result)
           doneCallback()
