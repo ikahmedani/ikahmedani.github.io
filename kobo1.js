@@ -49,12 +49,10 @@
               // }
             });
             if(y._geolocation){
-                y._geolocation = {
-                  "type": "Feature",
-                  "geometry": {
+                y._geolocation = {                
                     "type": "Point",
                     "coordinates": [ (y._geolocation[0] == null) ? 0 : y._geolocation[0], (y._geolocation[1] == null) ? 0 : y._geolocation[1]]
-                  }
+                  
                 }
               }
             console.log(y._geolocation);
