@@ -48,6 +48,16 @@
   
               // }
             });
+            if(y._geolocation){
+                y._geolocation = JSON.stringify({
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [ (y._geolocation[0] == null) ? 0 : y._geolocation[0], (y._geolocation[1] == null) ? 0 : y._geolocation[1]]
+                  }
+                })
+              }
+            console.log(y._geolocation);
             x.push(y);
       }
       cb(null, x);
@@ -64,6 +74,8 @@
           })
       })
   }
+  
+  
   function getAllKeys(dataArray, cb) {
     var x = [];
     for (var i=0; i<dataArray.length; i++){      
@@ -119,7 +131,7 @@
   }
   
   function myType(_var){
-      console.log(_var)
+      // console.log(_var)
       const schemaMap = {
         number  : tableau.dataTypeEnum.float,
         string  : tableau.dataTypeEnum.string,
