@@ -119,15 +119,21 @@
   }
   
   function myType(_var){
+      console.log(_var)
       const schemaMap = {
         number  : tableau.dataTypeEnum.float,
         string  : tableau.dataTypeEnum.string,
-        boolean : tableau.dataTypeEnum.bool
+        boolean : tableau.dataTypeEnum.bool,
+        datetime: tableau.dataTypeEnum.datetime
       };
     
       var g = isNaN(Number(_var)) ? _var : Number(_var)
+      if( new Date(_var) != 'Invalid Date' && typeof g != 'number'){
+          var x ='datetime'
+      }else{
+          var x = typeof g;
+      }
       
-      var x = typeof g;
     
       // //( schemaMap.string)
       return schemaMap[x] ? schemaMap[x] : tableau.dataTypeEnum.string
@@ -138,12 +144,15 @@
       var yy = [];
       for (var i = 0; i < data.length; i++){
           for(var j = 0; j< uniqueVar.length; j++){
-              if(data[i][uniqueVar[j]] ){          
+              if(data[i][uniqueVar[j]] ){ 
+                  // //(uniqueVar[j])
+                  // //(yy.filter(function(el){el == uniqueVar[j]}).length)  
+                  
                   
                   if(yy.indexOf(uniqueVar[j]) == -1){                   
                       cols.push({
                           id:uniqueVar[j].replace(/\W/g,'_'),
-                          dataType: myType(data[i][uniqueVar[j]])
+                          dataType: (uniqueVar[j]== '_geolocation')? tableau.dataTypeEnum.geometry : myType(data[i][uniqueVar[j]])
                       })
                       yy.push(uniqueVar[j])
                   } else{
@@ -219,7 +228,42 @@
           .catch(function(e){
               //(e)
           })
-
+  
+      // var cols = [
+      //   {
+      //     id: "id",
+      //     dataType: tableau.dataTypeEnum.string
+      //   },
+      //   {
+      //     id: "mag",
+      //     alias: "magnitude",
+      //     dataType: tableau.dataTypeEnum.float
+      //   },
+      //   {
+      //     id: "title",
+      //     alias: "title",
+      //     dataType: tableau.dataTypeEnum.string
+      //   },
+      //   {
+      //     id: "lat",
+      //     alias: "latitude",
+      //     dataType: tableau.dataTypeEnum.float
+      //   },
+      //   {
+      //     id: "lon",
+      //     alias: "longitude",
+      //     dataType: tableau.dataTypeEnum.float
+      //   }
+      // ];
+  
+      // var tableSchema = {
+      //   id: "earthquakeFeed",
+      //   alias:
+      //     "Earthquakes with magnitude greater than 4.5 in the last seven days",
+      //   columns: cols
+      // };
+  
+      // schemaCallback([tableSchema]);
     };
   
     // Download the data
@@ -231,6 +275,14 @@
       getDataForSchema(_userInputs)
       .then(function(result){
           return _formatDataPromise(result)
+          // tableData =[];
+          // for (var i =0; i<result.length; i++){
+          //     var x =  _.mapKeys(result[i], function(value, key) {
+          //         return key.replace(/\//ig,'_');
+          //       });
+          //       table.push(x)
+          // }
+  
           
       })
       .then(function(result){
@@ -238,9 +290,31 @@
           doneCallback()
       })
       .catch(function(e){
-          console.log(e)
+          //(e)
       })
   
+      // // //(JSON.parse(tableau.connectionData));
+      // $.getJSON(
+      //   "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson",
+      //   function(resp) {
+      //     var feat = resp.features,
+      //       tableData = [];
+  
+      //     // Iterate over the JSON object
+      //     for (var i = 0, len = feat.length; i < len; i++) {
+      //       tableData.push({
+      //         id: feat[i].id,
+      //         mag: feat[i].properties.mag,
+      //         title: feat[i].properties.title,
+      //         lon: feat[i].geometry.coordinates[0],
+      //         lat: feat[i].geometry.coordinates[1]
+      //       });
+      //     }
+  
+      //     table.appendRows(tableData);
+      //     doneCallback();
+      //   }
+      // );
     };
   
     tableau.registerConnector(myConnector);
