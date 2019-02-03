@@ -22,6 +22,7 @@ function getDataForSchema(_userInputs) {
     $.ajax({
       url: _userInputs.url,
       headers: { Authorization: "Token " + _userInputs.auth },
+      dataType:"json",
       json: true
     })
       .done(function(data) {
